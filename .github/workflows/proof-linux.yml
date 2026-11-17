@@ -1,0 +1,29 @@
+name: proof-linux
+on:
+  workflow_dispatch:
+jobs:
+  route:
+    runs-on: ubuntu-latest
+    outputs:
+      runs-on: ${{ steps.sel.outputs.runs-on }}
+      pool: ${{ steps.sel.outputs.pool }}
+      reason: ${{ steps.sel.outputs.reason }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: sel
+        uses: ./.github/actions/runner-select
+        with:
+          mode: ${{ vars.RUNNER_SELECT_MODE }}
+          default-runs-on: ubuntu-24.04
+          class: linux
+          placement-url: ${{ vars.MELLIFERA_GLOBAL_URL }}/v1/gha/placement?repo=${{ github.repository }}&label=linux-self-hosted
+          placement-token: ${{ secrets.MELLIFERA_PLACEMENT_TOKEN }}
+          placement-ca: ${{ vars.MELLIFERA_PLACEMENT_CA }}
+          overflow-runs-on: linux-self-hosted
+  work:
+    needs: route
+    runs-on: ${{ fromJSON(needs.route.outputs.runs-on) }}
+    steps:
+      - run: |
+          echo "pool=${{ needs.route.outputs.pool }} reason=${{ needs.route.outputs.reason }}"
+          echo "runner=${{ runner.name }} env=${{ runner.environment }}"
