@@ -15,7 +15,7 @@ jobs:
         with:
           mode: ${{ vars.RUNNER_SELECT_MODE }}
           default-runs-on: ubuntu-24.04
-          class: linux
+          class: other
           placement-url: ${{ vars.MELLIFERA_GLOBAL_URL }}/v1/gha/placement?repo=${{ github.repository }}&label=linux-self-hosted
           placement-token: ${{ secrets.MELLIFERA_PLACEMENT_TOKEN }}
           placement-ca: ${{ vars.MELLIFERA_PLACEMENT_CA }}

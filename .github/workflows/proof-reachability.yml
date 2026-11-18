@@ -46,7 +46,7 @@ jobs:
         with:
           mode: ${{ vars.RUNNER_SELECT_MODE }}
           default-runs-on: ubuntu-24.04
-          class: linux
+          class: other
           placement-ca: ${{ vars.MELLIFERA_PLACEMENT_CA }}
           overflow-runs-on: linux-self-hosted
       - name: summarize codes only
