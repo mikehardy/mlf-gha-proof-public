@@ -1,6 +1,12 @@
 name: proof-linux
 on:
   workflow_dispatch:
+    inputs:
+      hold_s:
+        description: seconds to hold the work job (0 or 45)
+        required: false
+        default: '0'
+        type: string
 jobs:
   route:
     runs-on: ubuntu-latest
@@ -27,3 +33,9 @@ jobs:
       - run: |
           echo "pool=${{ needs.route.outputs.pool }} reason=${{ needs.route.outputs.reason }}"
           echo "runner=${{ runner.name }} env=${{ runner.environment }}"
+          hold="${{ inputs.hold_s }}"
+          case "$hold" in
+            ""|0) ;;
+            45) sleep 45 ;;
+            *) echo "bad hold_s" >&2; exit 1 ;;
+          esac
